@@ -26,9 +26,9 @@ fi
 
 DELETE=${REPLICATE_DELETE:-yes}
 if [ "$DELETE" == "yes" ]; then
-  RSYNC_OPTIONS="--delete"
+  RSYNC_XTRA_OPTIONS="--delete"
 fi
 
-echo "+ Replicating with rsync (RSYNC_OPTIONS=$RSYNC_OPTIONS)..."
-rsync -av $RSYNC_OPTIONS $SRC/ $DST
+echo "+ Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
+rsync -av --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $SRC/ $DST
 echo "+ Done"

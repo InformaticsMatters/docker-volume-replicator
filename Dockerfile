@@ -6,5 +6,6 @@ RUN apk update && \
     apk add rsync openssh
 
 COPY docker-entrypoint.sh .
+COPY rsync-exclude.txt .
 
 CMD ["./docker-entrypoint.sh"]
