@@ -1,4 +1,7 @@
 # docker-volume-replicator
+
+[![CodeFactor](https://www.codefactor.io/repository/github/informaticsmatters/docker-volume-replicator/badge)](https://www.codefactor.io/repository/github/informaticsmatters/docker-volume-replicator)
+
 A simple container image that expects two volume mounts "/volume-a"
 and "/volume-b" where data is replicated (using rsync) from one to the
 other based on an environment variable whose value is either `AtoB` or `BtoA`.
