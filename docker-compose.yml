@@ -1,0 +1,23 @@
+---
+
+# Volume Replicator Docker-Compose file.
+#
+# Environment variables: -
+#
+# - IMAGE_TAG The replicator image version tag
+#             (default 2.0.0-rc.1)
+#
+# i.e.: -
+#
+#   IMAGE_TAG=2.0.0 docker-compose build
+#   IMAGE_TAG=2.0.0 docker-compose push
+
+version: '3.8'
+
+services:
+
+  volume-replicator:
+    build:
+      context: .
+    image: informaticsmatters/volume-replicator:${IMAGE_TAG:-2.0.0-rc.1}
+    container_name: volume-replicator
