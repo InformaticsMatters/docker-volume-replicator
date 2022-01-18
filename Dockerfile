@@ -1,4 +1,4 @@
-FROM alpine:3.11.6
+FROM alpine:3.15.0
 
 LABEL maintainer="achristie@informaticsmatters.com"
 
