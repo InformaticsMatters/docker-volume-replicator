@@ -29,6 +29,11 @@ if [ "$DELETE" == "yes" ]; then
   RSYNC_XTRA_OPTIONS="--delete"
 fi
 
+QUIET=${REPLICATE_QUIETLY:-yes}
+if [ "$QUIET" == "yes" ]; then
+  RSYNC_QUIET="-q"
+fi
+
 echo "+ Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
-rsync -av --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $SRC/ $DST
+rsync -a $RSYNC_QUIET --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $SRC/ $DST
 echo "+ Done"
