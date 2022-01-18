@@ -26,7 +26,7 @@ case "$REPLICATE_DIRECTION" in
 esac
 if [ -z "$SRC" ]; then
   echo "ERROR: Invalid REPLICATE_DIRECTION \"$REPLICATE_DIRECTION\""
-  exit 1
+  exit 0
 fi
 
 # Is S3 the origin (AtoB) or destination (BtoA)?
@@ -83,10 +83,10 @@ fi
 # Ensure the source and destination volumes exist...
 if [ ! -d "$SRC" ]; then
   echo "Directory $SRC DOES NOT exist."
-  exit 1
+  exit 0
 elif [ ! -d "$DST" ]; then
   echo "Directory $DST DOES NOT exist."
-  exit 1
+  exit 0
 fi
 
 DELETE=${REPLICATE_DELETE:-yes}
