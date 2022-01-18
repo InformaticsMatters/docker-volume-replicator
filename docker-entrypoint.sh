@@ -26,8 +26,14 @@ case "$REPLICATE_DIRECTION" in
 esac
 if [ -z "$SRC" ]; then
   echo "ERROR: Invalid REPLICATE_DIRECTION \"$REPLICATE_DIRECTION\""
-  exit 0
+  exit
 fi
+
+echo "--] REPLICATE_DIRECTION is ${REPLICATE_DIRECTION}"
+echo "--] SRC is ${SRC}"
+echo "--] DST is ${DST}"
+echo "--] REPLICATE_DELETE is ${REPLICATE_DELETE}"
+echo "--] REPLICATE_QUIETLY is ${REPLICATE_QUIETLY}"
 
 # Is S3 the origin (AtoB) or destination (BtoA)?
 # Here we've copied much of the logic from our 'bandr' repository.
@@ -77,16 +83,16 @@ if [ -v VOLUME_A_IS_S3 ]; then
   echo "--] s3fs S3_BUCKET_NAME=${S3_BUCKET_NAME}"
   echo "--] s3fs S3FS_CMD_OPTIONS=${S3FS_CMD_OPTIONS}"
   s3fs ${S3_BUCKET_NAME} ${S3FS_CMD_OPTIONS}
-  echo "--] s3fs started"
+  echo "--] s3fs started ($?)"
 fi
 
 # Ensure the source and destination volumes exist...
 if [ ! -d "$SRC" ]; then
   echo "Directory $SRC DOES NOT exist."
-  exit 0
+  exit
 elif [ ! -d "$DST" ]; then
   echo "Directory $DST DOES NOT exist."
-  exit 0
+  exit
 fi
 
 DELETE=${REPLICATE_DELETE:-yes}
