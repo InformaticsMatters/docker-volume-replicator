@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Is the replica direction set?
 : "${REPLICATE_DIRECTION?is not set}"
