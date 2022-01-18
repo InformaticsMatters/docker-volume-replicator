@@ -14,7 +14,7 @@ When running the image...
     to avoid wiping the destination
 
 In **2.0** you can use S3 as a destination or source. To do this you must set
-`REPLICANT_IS_S3` (where '/volume-a' is expected to be the S3 volume).
+`VOLUME_A_IS_S3` (where '/volume-a' is expected to be the S3 volume).
 See the `docker-entrypoint.sh` for details of these and other related
 environment variables.
 

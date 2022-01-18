@@ -17,13 +17,14 @@ if [ -z "$SRC" ]; then
 fi
 
 # Is S3 the origin (AtoB) or destination (BtoA)?
-# Here we essentially copy the logic from our 'bandr' repository.
-# If using S3 the user sets the variable 'REPLICANT_IS_S3'
-# and this code mounts the volume at /volume-a.
+# Here we've copied much of the logic from our 'bandr' repository.
+#
+# If using S3 for volume-a the user sets the variable 'VOLUME_A_IS_S3'
+# and this code mounts the S3 bucket at /volume-a.
 #
 # (see https://github.com/s3fs-fuse/s3fs-fuse)
-if [ -v REPLICANT_IS_S3 ]; then
-  echo "--] Replicant is S3"
+if [ -v VOLUME_A_IS_S3 ]; then
+  echo "--] Volume A is S3"
 
   # Certain credentials are essential...
   : "${S3_ACCESS_KEY?Need to set S3_ACCESS_KEY}"
@@ -57,8 +58,7 @@ if [ -v REPLICANT_IS_S3 ]; then
     S3FS_EXTRA_OPTIONS+=" -o ${S3_REQUEST_STYLE}"
   fi
 
-  # Create the replicant mount point (volume A)
-  # and then invoke s3fs
+  # Create the S3 mount point and then invoke s3fs
   mkdir -p /volume-a
   S3FS_CMD_OPTIONS="/volume-a -o passwd_file=/tmp/.passwd-s3fs ${S3FS_EXTRA_OPTIONS}"
   echo "--] s3fs S3_BUCKET_NAME=${S3_BUCKET_NAME}"
