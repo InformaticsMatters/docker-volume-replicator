@@ -43,6 +43,7 @@ echo "--] REPLICATE_QUIETLY is ${REPLICATE_QUIETLY}"
 #
 # (see https://github.com/s3fs-fuse/s3fs-fuse)
 if [ -v VOLUME_A_IS_S3 ]; then
+
   echo "--] Volume A is S3"
 
   # Certain credentials are essential...
@@ -77,22 +78,31 @@ if [ -v VOLUME_A_IS_S3 ]; then
     S3FS_EXTRA_OPTIONS+=" -o ${S3_REQUEST_STYLE}"
   fi
 
+  # We create volume-a, but does volume-b exist?
+  if [ ! -d "/volume-b" ]; then
+    echo "Directory /volume-b DOES NOT exist."
+    exit
+  fi
+
   # Create the S3 mount point and then invoke s3fs
   mkdir -p /volume-a
   S3FS_CMD_OPTIONS="/volume-a -o passwd_file=/tmp/.passwd-s3fs ${S3FS_EXTRA_OPTIONS}"
   echo "--] s3fs S3_BUCKET_NAME=${S3_BUCKET_NAME}"
   echo "--] s3fs S3FS_CMD_OPTIONS=${S3FS_CMD_OPTIONS}"
-  s3fs ${S3_BUCKET_NAME} ${S3FS_CMD_OPTIONS}
+  s3fs -d -o sigv2 ${S3_BUCKET_NAME} ${S3FS_CMD_OPTIONS}
   echo "--] s3fs started ($?)"
-fi
 
-# Ensure the source and destination volumes exist...
-if [ ! -d "$SRC" ]; then
-  echo "Directory $SRC DOES NOT exist."
-  exit
-elif [ ! -d "$DST" ]; then
-  echo "Directory $DST DOES NOT exist."
-  exit
+else
+
+  # Ensure the source and destination volumes exist...
+  if [ ! -d "$SRC" ]; then
+    echo "SRC directory ($SRC) DOES NOT exist."
+    exit
+  elif [ ! -d "$DST" ]; then
+    echo "DST directory ($DST) DOES NOT exist."
+    exit
+  fi
+
 fi
 
 DELETE=${REPLICATE_DELETE:-yes}
@@ -108,3 +118,7 @@ fi
 echo "--] Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
 rsync -a --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $RSYNC_QUIET $SRC/ $DST
 echo "--] Done"
+
+echo "--] Sleeping (3600)..."
+sleep 3600
+echo "--] Slept"
