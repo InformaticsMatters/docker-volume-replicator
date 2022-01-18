@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Controlled by the following ENV: -
+#
+#   REPLICATE_DIRECTION
+#   REPLICATE_DELETE (yes)
+#   REPLICATE_QUIETLY (yes)
+#
+#   VOLUME_A_IS_S3 (just needs to exist)
+#   S3_ACCESS_KEY
+#   S3_SECRET_KEY
+#   S3_BUCKET_NAME
+#   S3_URL
+#   S3_REQUEST_STYLE
+
 # Is the replica direction set?
 : "${REPLICATE_DIRECTION?is not set}"
 # And a valid value?
@@ -80,6 +93,11 @@ if [ "$DELETE" == "yes" ]; then
   RSYNC_XTRA_OPTIONS="--delete"
 fi
 
+QUIET=${REPLICATE_QUIETLY:-yes}
+if [ "$QUIET" == "yes" ]; then
+  RSYNC_QUIET="--quiet"
+fi
+
 echo "--] Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
-rsync -av --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $SRC/ $DST
+rsync -a --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $RSYNC_QUIET $SRC/ $DST
 echo "--] Done"
