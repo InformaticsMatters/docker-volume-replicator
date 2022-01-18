@@ -77,6 +77,7 @@ if [ -v VOLUME_A_IS_S3 ]; then
   echo "--] s3fs S3_BUCKET_NAME=${S3_BUCKET_NAME}"
   echo "--] s3fs S3FS_CMD_OPTIONS=${S3FS_CMD_OPTIONS}"
   s3fs ${S3_BUCKET_NAME} ${S3FS_CMD_OPTIONS}
+  echo "--] s3fs started"
 fi
 
 # Ensure the source and destination volumes exist...
