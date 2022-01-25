@@ -9,8 +9,8 @@
 #
 # i.e.: -
 #
-#   IMAGE_TAG=2.0.0 docker-compose build
-#   IMAGE_TAG=2.0.0 docker-compose push
+#   IMAGE_TAG=stable docker-compose build
+#   IMAGE_TAG=stable docker-compose push
 
 version: '3.8'
 
