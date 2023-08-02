@@ -32,8 +32,8 @@ fi
 echo "--] REPLICATE_DIRECTION is ${REPLICATE_DIRECTION}"
 echo "--] SRC is ${SRC}"
 echo "--] DST is ${DST}"
-echo "--] REPLICATE_DELETE is ${REPLICATE_DELETE}"
-echo "--] REPLICATE_QUIETLY is ${REPLICATE_QUIETLY}"
+echo "--] REPLICATE_DELETE is ${REPLICATE_DELETE:-yes}"
+echo "--] REPLICATE_QUIETLY is ${REPLICATE_QUIETLY:-yes}"
 
 # Is S3 the origin (AtoB) or destination (BtoA)?
 # Here we've copied much of the logic from our 'bandr' repository.
@@ -118,7 +118,3 @@ fi
 echo "--] Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
 rsync -a --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $RSYNC_QUIET $SRC/ $DST
 echo "--] Done"
-
-echo "--] Sleeping (3600)..."
-sleep 3600
-echo "--] Slept"
