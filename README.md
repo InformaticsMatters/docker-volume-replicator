@@ -7,7 +7,6 @@
 
 [![build latest](https://github.com/informaticsmatters/docker-volume-replicator/actions/workflows/build-latest.yaml/badge.svg)](https://github.com/informaticsmatters/docker-volume-replicator/actions/workflows/build-latest.yaml)
 [![build tag](https://github.com/informaticsmatters/docker-volume-replicator/actions/workflows/build-tag.yaml/badge.svg)](https://github.com/informaticsmatters/docker-volume-replicator/actions/workflows/build-tag.yaml)
-[![build stable](https://github.com/informaticsmatters/docker-volume-replicator/actions/workflows/build-stable.yaml/badge.svg)](https://github.com/informaticsmatters/docker-volume-replicator/actions/workflows/build-stable.yaml)
 
 A simple container image that expects two volume mounts "/volume-a"
 and "/volume-b" where data is replicated (using rsync) from one to the
@@ -16,8 +15,8 @@ other based on an environment variable whose value is either `AtoB` or `BtoA`.
 When running the image...
 
 1.  Mount volumes onto the paths `/volume-a` and `/volume-b`
-1.  Set environment variable `REPLICATE_DIRECTION` (to either `AtoB` or `BtoA`)
-1.  Set environment variable `REPLICATE_DELETE` to anything other than `yes`
+2.  Set environment variable `REPLICATE_DIRECTION` (to either `AtoB` or `BtoA`)
+3.  Set environment variable `REPLICATE_DELETE` to anything other than `yes`
     to avoid wiping the destination
 
 In **2.0** you can use S3 as a destination or source. To do this you must set
