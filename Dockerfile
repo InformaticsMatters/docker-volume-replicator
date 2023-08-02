@@ -1,4 +1,4 @@
-FROM debian:9.13-slim
+FROM debian:12.1-slim
 
 LABEL maintainer="achristie@informaticsmatters.com"
 
