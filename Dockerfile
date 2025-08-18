@@ -7,6 +7,7 @@ RUN apt-get update && \
         gnupg \
         lsb-release \
         openssh-client \
+        rclone \
         rsync \
         s3fs \
         sshpass \
@@ -18,5 +19,8 @@ ENV TZ=UTC
 
 COPY docker-entrypoint.sh .
 COPY rsync-exclude.txt .
+COPY rclone.conf /root/.config/rclone/rclone.conf
+
+RUN chmod 755 /root/.config/rclone/rclone.conf
 
 CMD ["./docker-entrypoint.sh"]

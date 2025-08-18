@@ -24,16 +24,18 @@ In **2.0** you can use S3 as a destination or source. To do this you must set
 See the `docker-entrypoint.sh` for details of these and other related
 environment variables.
 
+In **3.0** rclone can be used to synchronise the volume to an S3 bucket.
+
 ## Building the image
 Just run docker...
 
-    $ docker-compose build
+    $ docker compose build
 
 And run typically with something like: -
 
     $ docker run --rm -e REPLICATE_DIRECTION=AtoB \
             -v $PWD/a:/volume-a \
-            -v $PWD/b:/volume-b \ 
-            informaticsmatters/volume-replicator:2.0.0-rc.1
+            -v $PWD/b:/volume-b \
+            informaticsmatters/volume-replicator:3.0.0
 
 ---
