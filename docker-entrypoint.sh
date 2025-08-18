@@ -16,6 +16,7 @@
 #   S3_REQUEST_STYLE
 #
 #   USE_RCLONE Set to 'yes' to rclone to the (S3) destination
+#   USE_RCLONE_NO_CHECK_CERTIFICATE Set to 'yes' to avoid certificate checks
 
 # Is the replica direction set?
 : "${REPLICATE_DIRECTION?is not set}"
@@ -143,8 +144,13 @@ if [ "$USE_RCLONE" == "yes" ]; then
     RCLONE_CMD="copy"
   fi
 
+  RCLONE_OPTIONS=""
+  if [ "$USE_RCLONE_NO_CHECK_CERTIFICATE" == "yes" ]; then
+    RCLONE_OPTIONS="--no-check-certificate"
+  fi
+
   echo "--] Replicating with rclone $RCLONE_CMD (S3_BUCKET_NAME=$S3_BUCKET_NAME)..."
-  echo rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME
+  echo rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME $RCLONE_OPTIONS
   echo "--] Done"
   sleep 600
 
