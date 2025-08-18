@@ -150,7 +150,7 @@ if [ "$USE_RCLONE" == "yes" ]; then
   fi
 
   echo "--] Replicating with rclone $RCLONE_CMD (S3_BUCKET_NAME=$S3_BUCKET_NAME)..."
-  echo rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME $RCLONE_OPTIONS
+  rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME $RCLONE_OPTIONS
   echo "--] Done"
   sleep 600
 
