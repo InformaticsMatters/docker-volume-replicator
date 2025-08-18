@@ -2,7 +2,7 @@
 
 # Controlled by the following ENV: -
 #
-#   REPLICATE_DIRECTION
+#   REPLICATE_DIRECTION (AtoB or BtoA)
 #   REPLICATE_DELETE (yes)
 #   REPLICATE_QUIETLY (yes)
 #
@@ -144,8 +144,9 @@ if [ "$USE_RCLONE" == "yes" ]; then
   fi
 
   echo "--] Replicating with rclone $RCLONE_CMD (S3_BUCKET_NAME=$S3_BUCKET_NAME)..."
-  rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME
+  echo rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME
   echo "--] Done"
+  sleep 600
 
 else
 
