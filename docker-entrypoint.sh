@@ -8,7 +8,7 @@
 #
 #   VOLUME_A_IS_S3 (just needs to exist)
 #
-#   AWS_ACCESS_KEY
+#   AWS_ACCESS_KEY_ID
 #   AWS_SECRET_ACCESS_KEY
 #   AWS_ENDPOINTS
 #   AWS_DEFAULT_REGION
@@ -51,11 +51,11 @@ if [ -v VOLUME_A_IS_S3 ]; then
   echo "--] Volume A is S3"
 
   # Certain credentials are essential...
-  : "${AWS_ACCESS_KEY?Need to set AWS_ACCESS_KEY}"
+  : "${AWS_ACCESS_KEY_ID?Need to set AWS_ACCESS_KEY_ID}"
   : "${AWS_SECRET_ACCESS_KEY?Need to set AWS_SECRET_ACCESS_KEY}"
   : "${S3_BUCKET_NAME?Need to set S3_BUCKET_NAME}"
 
-  echo "--] AWS_ACCESS_KEY is (supplied)"
+  echo "--] AWS_ACCESS_KEY_ID is (supplied)"
   echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
   echo "--] AWS_ENDPOINTS is ${AWS_ENDPOINTS}"
   echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
@@ -69,7 +69,7 @@ if [ -v VOLUME_A_IS_S3 ]; then
   #        you must use add the `--privileged` option.
 
   # Put S3 credentials in a custom passwd file...
-  echo "${AWS_ACCESS_KEY}:${AWS_SECRET_ACCESS_KEY}" > /tmp/.passwd-s3fs
+  echo "${AWS_ACCESS_KEY_ID}:${AWS_SECRET_ACCESS_KEY}" > /tmp/.passwd-s3fs
   chmod 600 /tmp/.passwd-s3fs
 
   # Any extra S3-Fuse args required?
@@ -125,12 +125,12 @@ if [ "$USE_RCLONE" == "yes" ]; then
   fi
 
   # Certain credentials are essential...
-  : "${AWS_ACCESS_KEY?Need to set AWS_ACCESS_KEY}"
+  : "${AWS_ACCESS_KEY_ID?Need to set AWS_ACCESS_KEY_ID}"
   : "${AWS_SECRET_ACCESS_KEY?Need to set AWS_SECRET_ACCESS_KEY}"
   : "${AWS_DEFAULT_REGION?Need to set AWS_DEFAULT_REGION}"
   : "${S3_BUCKET_NAME?Need to set S3_BUCKET_NAME}"
 
-  echo "--] AWS_ACCESS_KEY is (supplied)"
+  echo "--] AWS_ACCESS_KEY_ID is (supplied)"
   echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
   echo "--] AWS_ENDPOINTS is ${AWS_ENDPOINTS}"
   echo "--] AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
