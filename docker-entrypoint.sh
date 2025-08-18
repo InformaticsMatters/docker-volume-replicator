@@ -7,11 +7,15 @@
 #   REPLICATE_QUIETLY (yes)
 #
 #   VOLUME_A_IS_S3 (just needs to exist)
-#   S3_ACCESS_KEY
-#   S3_SECRET_KEY
+#
+#   AWS_ACCESS_KEY
+#   AWS_SECRET_ACCESS_KEY
+#   AWS_ENDPOINTS
+#   AWS_DEFAULT_REGION
 #   S3_BUCKET_NAME
-#   S3_URL
 #   S3_REQUEST_STYLE
+#
+#   USE_RCLONE Set to 'yes' to rclone to the (S3) destination
 
 # Is the replica direction set?
 : "${REPLICATE_DIRECTION?is not set}"
@@ -47,14 +51,14 @@ if [ -v VOLUME_A_IS_S3 ]; then
   echo "--] Volume A is S3"
 
   # Certain credentials are essential...
-  : "${S3_ACCESS_KEY?Need to set S3_ACCESS_KEY}"
-  : "${S3_SECRET_KEY?Need to set S3_SECRET_KEY}"
+  : "${AWS_ACCESS_KEY?Need to set AWS_ACCESS_KEY}"
+  : "${AWS_SECRET_ACCESS_KEY?Need to set AWS_SECRET_ACCESS_KEY}"
   : "${S3_BUCKET_NAME?Need to set S3_BUCKET_NAME}"
 
-  echo "--] S3_ACCESS_KEY is (supplied)"
-  echo "--] S3_SECRET_KEY is (supplied)"
+  echo "--] AWS_ACCESS_KEY is (supplied)"
+  echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
+  echo "--] AWS_ENDPOINTS is ${AWS_ENDPOINTS}"
   echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
-  echo "--] S3_URL is ${S3_URL}"
   echo "--] S3_REQUEST_STYLE is ${S3_REQUEST_STYLE}"
 
   # We'll use s3fs to mount the bucket so it can be used
@@ -65,14 +69,14 @@ if [ -v VOLUME_A_IS_S3 ]; then
   #        you must use add the `--privileged` option.
 
   # Put S3 credentials in a custom passwd file...
-  echo "${S3_ACCESS_KEY}:${S3_SECRET_KEY}" > /tmp/.passwd-s3fs
+  echo "${AWS_ACCESS_KEY}:${AWS_SECRET_ACCESS_KEY}" > /tmp/.passwd-s3fs
   chmod 600 /tmp/.passwd-s3fs
 
   # Any extra S3-Fuse args required?
   # i.e. is S3_URL or S3_REQUEST_STYLE defined?
   S3FS_EXTRA_OPTIONS=""
-  if [ -n "$S3_URL" ]; then
-    S3FS_EXTRA_OPTIONS+="-o url=${S3_URL}"
+  if [ -n "$AWS_ENDPOINTS" ]; then
+    S3FS_EXTRA_OPTIONS+="-o url=${AWS_ENDPOINTS}"
   fi
   if [ -n "$S3_REQUEST_STYLE" ]; then
     S3FS_EXTRA_OPTIONS+=" -o ${S3_REQUEST_STYLE}"
@@ -105,16 +109,45 @@ else
 
 fi
 
-DELETE=${REPLICATE_DELETE:-yes}
-if [ "$DELETE" == "yes" ]; then
-  RSYNC_XTRA_OPTIONS="--delete"
-fi
+if [ "$USE_RCLONE" == "yes" ]; then
 
-QUIET=${REPLICATE_QUIETLY:-yes}
-if [ "$QUIET" == "yes" ]; then
-  RSYNC_QUIET="--quiet"
-fi
+  # Certain credentials are essential...
+  : "${AWS_ACCESS_KEY?Need to set AWS_ACCESS_KEY}"
+  : "${AWS_SECRET_ACCESS_KEY?Need to set AWS_SECRET_ACCESS_KEY}"
+  : "${AWS_DEFAULT_REGION?Need to set AWS_DEFAULT_REGION}"
+  : "${S3_BUCKET_NAME?Need to set S3_BUCKET_NAME}"
 
-echo "--] Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
-rsync -a --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $RSYNC_QUIET $SRC/ $DST
-echo "--] Done"
+  echo "--] AWS_ACCESS_KEY is (supplied)"
+  echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
+  echo "--] AWS_ENDPOINTS is ${AWS_ENDPOINTS}"
+  echo "--] AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
+  echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
+
+  DELETE=${REPLICATE_DELETE:-yes}
+  if [ "$DELETE" == "yes" ]; then
+    RCLONE_CMD="sync"
+  else
+    RCLONE_CMD="copy"
+  fi
+
+  echo "--] Replicating with rclone $RCLONE_CMD (S3_BUCKET_NAME=$S3_BUCKET_NAME)..."
+  rclone $RCLONE_CMD $SRC remote:/$S3_BUCKET_NAME
+  echo "--] Done"
+
+else
+
+  DELETE=${REPLICATE_DELETE:-yes}
+  if [ "$DELETE" == "yes" ]; then
+    RSYNC_XTRA_OPTIONS="--delete"
+  fi
+
+  QUIET=${REPLICATE_QUIETLY:-yes}
+  if [ "$QUIET" == "yes" ]; then
+    RSYNC_QUIET="--quiet"
+  fi
+
+  echo "--] Replicating with rsync (RSYNC_XTRA_OPTIONS=$RSYNC_XTRA_OPTIONS)..."
+  rsync -a --exclude-from='./rsync-exclude.txt' $RSYNC_XTRA_OPTIONS $RSYNC_QUIET $SRC/ $DST
+  echo "--] Done"
+
+fi
