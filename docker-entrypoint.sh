@@ -96,6 +96,14 @@ if [ -v VOLUME_A_IS_S3 ]; then
   s3fs -d -o sigv2 ${S3_BUCKET_NAME} ${S3FS_CMD_OPTIONS}
   echo "--] s3fs started ($?)"
 
+elif [ -v USE_RCLONE ]; then
+
+  # Ensure the source volume exists...
+  if [ ! -d "$SRC" ]; then
+    echo "SRC directory ($SRC) DOES NOT exist."
+    exit
+  fi
+
 else
 
   # Ensure the source and destination volumes exist...
@@ -110,6 +118,11 @@ else
 fi
 
 if [ "$USE_RCLONE" == "yes" ]; then
+
+  if [ "$REPLICATE_DIRECTION" == "AtoB" ]; then
+    echo REPLICATE_DIRECTION cannot be AtoB
+    exit 1
+  fi
 
   # Certain credentials are essential...
   : "${AWS_ACCESS_KEY?Need to set AWS_ACCESS_KEY}"

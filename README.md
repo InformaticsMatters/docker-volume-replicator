@@ -1,4 +1,4 @@
-# docker-volume-replicator (2.0)
+# docker-volume-replicator (3.0)
 
 ![Architecture](https://img.shields.io/badge/architecture-amd64%20%7C%20arm64-lightgrey)
 [![CodeFactor](https://www.codefactor.io/repository/github/informaticsmatters/docker-volume-replicator/badge)](https://www.codefactor.io/repository/github/informaticsmatters/docker-volume-replicator)
@@ -25,6 +25,9 @@ See the `docker-entrypoint.sh` for details of these and other related
 environment variables.
 
 In **3.0** rclone can be used to synchronise the volume to an S3 bucket.
+We do this by setting `USE_RCLONE` (to `yes`) and providing values for
+`AWS_ACCESS_KEY`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and
+`S3_BUCKET_NAME`.
 
 ## Building the image
 Just run docker...
