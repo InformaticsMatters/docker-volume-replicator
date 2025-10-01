@@ -6,8 +6,8 @@ on:
     branches:
     - 'main'
   schedule:
-  # Build daily at 6:17am...
-  - cron: '17 6 * * *'
+  # Build every Monday (1) at 6:17am...
+  - cron: '17 6 * * 1'
 
 jobs:
   build-latest:
