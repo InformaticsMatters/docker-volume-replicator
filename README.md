@@ -29,9 +29,15 @@ We do this by setting `USE_RCLONE` (to `yes`) and providing values for
 `AWS_ACCESS_KEY`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, and
 `S3_BUCKET_NAME`.
 
-## Building the image
-Just run docker...
+In **3.1** you can use rclone to replicate to a sub-directory
+that is different for each day of the week. By setting `USE_DOW_FOR_RCLONE` (to `yes`)
+you can keep backups for up to a week i.e. using sub-directories **Monday**,
+**Tuesday**, etc.
 
+## Building the image
+To build an image tagged `3.1.0` just run docker compose...
+
+    $ export IMAGE_TAG=3.1.0
     $ docker compose build
 
 And run typically with something like: -
@@ -39,6 +45,6 @@ And run typically with something like: -
     $ docker run --rm -e REPLICATE_DIRECTION=AtoB \
             -v $PWD/a:/volume-a \
             -v $PWD/b:/volume-b \
-            informaticsmatters/volume-replicator:3.0.0
+            informaticsmatters/volume-replicator:$IMAGE_TAG
 
 ---
