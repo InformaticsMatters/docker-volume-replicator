@@ -132,13 +132,6 @@ if [ "$USE_RCLONE" == "yes" ]; then
   : "${AWS_DEFAULT_REGION?Need to set AWS_DEFAULT_REGION}"
   : "${S3_BUCKET_NAME?Need to set S3_BUCKET_NAME}"
 
-  echo "--] USE_DOW_FOR_RCLONE is ${USE_DOW_FOR_RCLONE:-no}"
-  echo "--] AWS_ACCESS_KEY_ID is (supplied)"
-  echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
-  echo "--] AWS_ENDPOINTS is ${AWS_ENDPOINTS}"
-  echo "--] AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
-  echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
-
   RCLONE_SUB_DIR=""
   USE_DOW_FOR_RCLONE=${USE_DOW_FOR_RCLONE:-no}
   if [ "$USE_DOW_FOR_RCLONE" == "yes" ]; then
@@ -158,10 +151,18 @@ if [ "$USE_RCLONE" == "yes" ]; then
     RCLONE_OPTIONS="--no-check-certificate"
   fi
 
-  echo "--] Replicating with rclone $RCLONE_CMD (S3_BUCKET_NAME=$S3_BUCKET_NAME)..."
+  echo "--] AWS_ACCESS_KEY_ID is (supplied)"
+  echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
+  echo "--] AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
+  echo "--] RCLONE_S3_ENDPOINT is ${RCLONE_S3_ENDPOINT}"
+  echo "--] RCLONE_S3_PROVIDER is ${RCLONE_S3_PROVIDER}"
+  echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
+  echo "--] USE_DOW_FOR_RCLONE is ${USE_DOW_FOR_RCLONE:-no}"
+  echo "--] RCLONE_OPTIONS=${RCLONE_OPTIONS}"
+
+  echo "--] Replicating with rclone $RCLONE_CMD to remote:/${S3_BUCKET_NAME}${RCLONE_SUB_DIR}..."
   rclone $RCLONE_CMD $SRC remote:/${S3_BUCKET_NAME}${RCLONE_SUB_DIR} ${RCLONE_OPTIONS}
   echo "--] Done"
-  sleep 600
 
 else
 
