@@ -35,6 +35,8 @@ if [ -z "$SRC" ]; then
   exit
 fi
 
+echo "--] Ciao! ($(date))"
+
 echo "--] REPLICATE_DIRECTION is ${REPLICATE_DIRECTION}"
 echo "--] SRC is ${SRC}"
 echo "--] DST is ${DST}"
@@ -181,3 +183,5 @@ else
   echo "--] Done"
 
 fi
+
+echo "--] Arrivederci! ($(date))"
