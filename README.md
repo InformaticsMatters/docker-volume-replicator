@@ -31,8 +31,8 @@ We do this by setting `USE_RCLONE` (to `yes`) and providing values for
 
 In **3.1** you can use rclone to replicate to a sub-directory
 that is different for each day of the week. By setting `USE_DOW_FOR_RCLONE` (to `yes`)
-you can keep backups for up to a week i.e. using sub-directories **Monday**,
-**Tuesday**, etc.
+you can keep backups for up to a week i.e. using sub-directories **1-Monday**,
+**2-Tuesday**, etc.
 
 ## Building the image
 To build an image tagged `3.1.0` just run docker compose...
