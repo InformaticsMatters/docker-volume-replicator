@@ -137,7 +137,7 @@ if [ "$USE_RCLONE" == "yes" ]; then
   RCLONE_SUB_DIR=""
   USE_DOW_FOR_RCLONE=${USE_DOW_FOR_RCLONE:-no}
   if [ "$USE_DOW_FOR_RCLONE" == "yes" ]; then
-    DOW=$(date +"%A")
+    DOW=$(date +"%u-%A")
     RCLONE_SUB_DIR="/${DOW}"
   fi
 
