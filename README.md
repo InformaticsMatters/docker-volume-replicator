@@ -34,10 +34,15 @@ that is different for each day of the week. By setting `USE_DOW_FOR_RCLONE` (to 
 you can keep backups for up to a week i.e. using sub-directories **1-Monday**,
 **2-Tuesday**, etc.
 
-## Building the image
-To build an image tagged `3.1.0` just run docker compose...
+In **3.2** you can append arbitrary options to the rclone command by setting
+`RCLONE_EXTRA_OPTIONS`. If it is not set an empty string is used, leaving the
+rclone command unchanged. For example, to limit the transfer bandwidth you might
+set `RCLONE_EXTRA_OPTIONS` to `--bwlimit 10M`.
 
-    $ export IMAGE_TAG=3.1.0
+## Building the image
+To build an image tagged `3.2.0` just run docker compose...
+
+    $ export IMAGE_TAG=3.2.0
     $ docker compose build
 
 And run typically with something like: -

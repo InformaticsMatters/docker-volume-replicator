@@ -18,6 +18,7 @@
 #   USE_RCLONE Set to 'yes' to rclone to the (S3) destination
 #   USE_RCLONE_NO_CHECK_CERTIFICATE Set to 'yes' to avoid certificate checks
 #   USE_DOW_FOR_RCLONE Set to 'yes' to use day of the week as a destination sub-directory
+#   RCLONE_EXTRA_OPTIONS Extra options appended to the rclone command
 
 # Is the replica direction set?
 : "${REPLICATE_DIRECTION?is not set}"
@@ -153,6 +154,8 @@ if [ "$USE_RCLONE" == "yes" ]; then
     RCLONE_OPTIONS="--no-check-certificate"
   fi
 
+  RCLONE_EXTRA_OPTIONS=${RCLONE_EXTRA_OPTIONS:-}
+
   echo "--] AWS_ACCESS_KEY_ID is (supplied)"
   echo "--] AWS_SECRET_ACCESS_KEY is (supplied)"
   echo "--] AWS_DEFAULT_REGION is ${AWS_DEFAULT_REGION}"
@@ -161,9 +164,10 @@ if [ "$USE_RCLONE" == "yes" ]; then
   echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
   echo "--] USE_DOW_FOR_RCLONE is ${USE_DOW_FOR_RCLONE:-no}"
   echo "--] RCLONE_OPTIONS=${RCLONE_OPTIONS}"
+  echo "--] RCLONE_EXTRA_OPTIONS=${RCLONE_EXTRA_OPTIONS}"
 
   echo "--] Replicating with rclone $RCLONE_CMD to remote:/${S3_BUCKET_NAME}${RCLONE_SUB_DIR}..."
-  rclone $RCLONE_CMD $SRC remote:/${S3_BUCKET_NAME}${RCLONE_SUB_DIR} ${RCLONE_OPTIONS}
+  rclone $RCLONE_CMD $SRC remote:/${S3_BUCKET_NAME}${RCLONE_SUB_DIR} ${RCLONE_OPTIONS} ${RCLONE_EXTRA_OPTIONS}
   echo "--] Done"
 
 else
