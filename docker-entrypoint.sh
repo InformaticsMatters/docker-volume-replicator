@@ -18,6 +18,7 @@
 #   USE_RCLONE Set to 'yes' to rclone to the (S3) destination
 #   USE_RCLONE_NO_CHECK_CERTIFICATE Set to 'yes' to avoid certificate checks
 #   USE_DOW_FOR_RCLONE Set to 'yes' to use day of the week as a destination sub-directory
+#   USE_FIRST_OF_MONTH_FOR_RCLONE Set to 'yes' to use a "First-Of-Month" destination sub-directory on the 1st of the month
 #   RCLONE_EXTRA_OPTIONS Extra options appended to the rclone command
 
 # Is the replica direction set?
@@ -135,11 +136,25 @@ if [ "$USE_RCLONE" == "yes" ]; then
   : "${AWS_DEFAULT_REGION?Need to set AWS_DEFAULT_REGION}"
   : "${S3_BUCKET_NAME?Need to set S3_BUCKET_NAME}"
 
+  # Do we use a Day of week sub-directory?
+  # e.g. "Tuesday"?
   RCLONE_SUB_DIR=""
   USE_DOW_FOR_RCLONE=${USE_DOW_FOR_RCLONE:-no}
   if [ "$USE_DOW_FOR_RCLONE" == "yes" ]; then
     DOW=$(date +"%u-%A")
     RCLONE_SUB_DIR="/${DOW}"
+  fi
+
+  # Do we use a "1st of Month" subdirectory?
+  # e.g. "First-Of-Month".
+  # This is only used on the 1st day of the month,
+  # where it replaces any DOW sub-directory.
+  USE_FIRST_OF_MONTH_FOR_RCLONE=${USE_FIRST_OF_MONTH_FOR_RCLONE:-no}
+  if [ "$USE_FIRST_OF_MONTH_FOR_RCLONE" == "yes" ]; then
+    DAY_OF_MONTH=$(date +"%d")
+    if [ "$DAY_OF_MONTH" == "01" ]; then
+      RCLONE_SUB_DIR="/First-Of-Month"
+    fi
   fi
 
   DELETE=${REPLICATE_DELETE:-yes}
@@ -163,6 +178,7 @@ if [ "$USE_RCLONE" == "yes" ]; then
   echo "--] RCLONE_S3_PROVIDER is ${RCLONE_S3_PROVIDER}"
   echo "--] S3_BUCKET_NAME is ${S3_BUCKET_NAME}"
   echo "--] USE_DOW_FOR_RCLONE is ${USE_DOW_FOR_RCLONE:-no}"
+  echo "--] USE_FIRST_OF_MONTH_FOR_RCLONE is ${USE_FIRST_OF_MONTH_FOR_RCLONE:-no}"
   echo "--] RCLONE_OPTIONS=${RCLONE_OPTIONS}"
   echo "--] RCLONE_EXTRA_OPTIONS=${RCLONE_EXTRA_OPTIONS}"
 

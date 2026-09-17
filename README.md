@@ -39,6 +39,10 @@ In **3.2** you can append arbitrary options to the rclone command by setting
 rclone command unchanged. For example, to limit the transfer bandwidth you might
 set `RCLONE_EXTRA_OPTIONS` to `--bwlimit 10M`.
 
+In **3.3** you can keep monthly backups by setting `USE_FIRST_OF_MONTH_FOR_RCLONE`
+(to `yes`). When set, if the Day of the month is `1` a subdirectory `First-Of-Month`
+will be used.
+
 ## Building the image
 To build an image tagged `3.2.0` just run docker compose...
 
