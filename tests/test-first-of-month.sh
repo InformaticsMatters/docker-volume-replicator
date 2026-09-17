@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Tests the rclone "First-Of-Month" sub-directory logic in docker-entrypoint.sh.
+# Tests the rclone "First-Of-Month" (and "Daily") sub-directory logic
+# in docker-entrypoint.sh.
 #
 # The entrypoint is run in a Debian container (it needs bash 4.2+ and /volume-b)
 # with stub 'date' and 'rclone' commands on the PATH. The stub 'date' returns
@@ -69,22 +70,20 @@ expect_destination() {
 expect_destination "First of month uses First-Of-Month" \
   "remote:/bucket/First-Of-Month" "$(run_entrypoint 01 yes no)"
 
-expect_destination "Other days do not use First-Of-Month" \
-  "remote:/bucket" "$(run_entrypoint 15 yes no)"
+expect_destination "Other days use Daily" \
+  "remote:/bucket/Daily" "$(run_entrypoint 15 yes no)"
 
-DESTINATION="$(run_entrypoint 15 yes yes)"
-if [[ "$DESTINATION" =~ ^remote:/bucket/[1-7]-[A-Za-z]+day$ ]]; then
-  echo "PASS: Other days keep the day-of-week sub-directory"
-else
-  echo "FAIL: Other days keep the day-of-week sub-directory (got '$DESTINATION')"
-  FAILURES=$((FAILURES + 1))
-fi
+expect_destination "Other days use Daily instead of day-of-week" \
+  "remote:/bucket/Daily" "$(run_entrypoint 15 yes yes)"
 
 expect_destination "First of month replaces day-of-week" \
   "remote:/bucket/First-Of-Month" "$(run_entrypoint 01 yes yes)"
 
 expect_destination "First of month ignored when not enabled" \
   "remote:/bucket" "$(run_entrypoint 01 no no)"
+
+expect_destination "Daily ignored when not enabled" \
+  "remote:/bucket" "$(run_entrypoint 15 no no)"
 
 if [ "$FAILURES" -ne 0 ]; then
   echo "${FAILURES} test(s) failed"
