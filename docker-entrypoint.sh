@@ -18,7 +18,7 @@
 #   USE_RCLONE Set to 'yes' to rclone to the (S3) destination
 #   USE_RCLONE_NO_CHECK_CERTIFICATE Set to 'yes' to avoid certificate checks
 #   USE_DOW_FOR_RCLONE Set to 'yes' to use day of the week as a destination sub-directory
-#   USE_FIRST_OF_MONTH_FOR_RCLONE Set to 'yes' to use a "First-Of-Month" destination sub-directory on the 1st of the month
+#   USE_FIRST_OF_MONTH_FOR_RCLONE Set to 'yes' to use a "First-Of-Month" destination sub-directory on the 1st of the month (and "Daily" on other days)
 #   RCLONE_EXTRA_OPTIONS Extra options appended to the rclone command
 
 # Is the replica direction set?
@@ -146,14 +146,16 @@ if [ "$USE_RCLONE" == "yes" ]; then
   fi
 
   # Do we use a "1st of Month" subdirectory?
-  # e.g. "First-Of-Month".
-  # This is only used on the 1st day of the month,
-  # where it replaces any DOW sub-directory.
+  # If so, "First-Of-Month" is used on the 1st day of the month
+  # and "Daily" is used on all other days.
+  # Either replaces any DOW sub-directory.
   USE_FIRST_OF_MONTH_FOR_RCLONE=${USE_FIRST_OF_MONTH_FOR_RCLONE:-no}
   if [ "$USE_FIRST_OF_MONTH_FOR_RCLONE" == "yes" ]; then
     DAY_OF_MONTH=$(date +"%d")
     if [ "$DAY_OF_MONTH" == "01" ]; then
       RCLONE_SUB_DIR="/First-Of-Month"
+    else
+      RCLONE_SUB_DIR="/Daily"
     fi
   fi
 
